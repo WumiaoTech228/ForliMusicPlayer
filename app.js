@@ -25,11 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Helper to construct absolute API URLs when running on other origins (like file:///)
   function getApiUrl(apiPath) {
-    const origin = window.location.origin;
-    if (origin.startsWith('http://localhost:3000') || origin.startsWith('http://127.0.0.1:3000')) {
-      return apiPath;
+    if (window.location.protocol === 'file:') {
+      return 'http://localhost:3000' + apiPath;
     }
-    return 'http://localhost:3000' + apiPath;
+    return apiPath;
   }
 
   // Helper to upgrade NetEase cover images to high resolution (500x500)
