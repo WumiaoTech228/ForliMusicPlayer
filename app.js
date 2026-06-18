@@ -1547,45 +1547,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateInstrumentalCountdown(currentTime) {
-    if (!fsInstrumentalDots || currentLyrics.length === 0) return;
-
-    // Find the next upcoming lyric line and its index
-    let nextIndex = -1;
-    for (let i = 0; i < currentLyrics.length; i++) {
-      if (currentLyrics[i].time > currentTime) {
-        nextIndex = i;
-        break;
-      }
+    if (fsInstrumentalDots) {
+      fsInstrumentalDots.classList.add('hidden');
+      fsInstrumentalDots.classList.remove('count-3', 'count-2', 'count-1');
     }
-
-    if (nextIndex !== -1) {
-      const nextLyric = currentLyrics[nextIndex];
-      const prevLyric = nextIndex > 0 ? currentLyrics[nextIndex - 1] : null;
-      const prevTime = prevLyric ? prevLyric.time : 0;
-      const gap = nextLyric.time - prevTime;
-
-      // Only show dots if the gap is >= 5 seconds (i.e. not a short transition between lines)
-      if (gap >= 5.0) {
-        const timeToNext = nextLyric.time - currentTime;
-        if (timeToNext > 0 && timeToNext <= 3.2) {
-          fsInstrumentalDots.classList.remove('hidden');
-          fsInstrumentalDots.classList.remove('count-3', 'count-2', 'count-1');
-          
-          if (timeToNext > 2.0) {
-            fsInstrumentalDots.classList.add('count-3');
-          } else if (timeToNext > 1.0) {
-            fsInstrumentalDots.classList.add('count-2');
-          } else {
-            fsInstrumentalDots.classList.add('count-1');
-          }
-          return;
-        }
-      }
-    }
-
-    // Hide dots if not in a countdown window or gap is too small
-    fsInstrumentalDots.classList.add('hidden');
-    fsInstrumentalDots.classList.remove('count-3', 'count-2', 'count-1');
   }
 
   function scheduleLyricsLayoutUpdate() {
