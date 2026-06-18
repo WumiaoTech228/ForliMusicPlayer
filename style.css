@@ -1880,6 +1880,7 @@ body {
 /* Lyrics Panel */
 .fs-lyrics-panel {
   width: 100%;
+  max-width: 460px; /* Limits lyrics text wrap width to match the left cover/title column */
   height: 52vh;
   min-height: 400px;
   max-height: 600px;

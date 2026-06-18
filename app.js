@@ -15,7 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let isDraggingProgress = false;
   let loopMode = localStorage.getItem('aura-loop-mode') || 'list'; // 'list' | 'single' | 'shuffle'
   let audioSourceMode = 'official'; // Always start with official and fallback silently
-  let triedFallbackSource = false; // Flag to track if fallback url was tried for current track
+  let currentSourceIndex = 0; // Index of the audio source currently being loaded/played
+  const AUDIO_SOURCES = [
+    (id) => `https://v.iarc.top/?server=netease&type=url&id=${id}`,
+    (id) => `https://api.injahow.cn/meting/?type=url&id=${id}`,
+    (id) => `https://music.163.com/song/media/outer/url?id=${id}.mp3`
+  ];
   let currentPlaylistId = localStorage.getItem('aura-current-playlist-id') || '8529369110'; // Default lofi favorites
   
   // Helper to construct absolute API URLs when running on other origins (like file:///)
@@ -1015,22 +1020,21 @@ document.addEventListener('DOMContentLoaded', () => {
     syncPlaylistDrawerActive();
   }
 
-  function loadTrackSource(track, useFallback = false) {
+  function loadTrackSource(track, sourceIndex = 0) {
+    currentSourceIndex = sourceIndex;
     if (track.file) {
       audio.src = track.url;
-      triedFallbackSource = false;
+      currentSourceIndex = -1; // Local files don't use sources list
     } else if (track.id) {
-      if (useFallback) {
-        audio.src = `https://music.163.com/song/media/outer/url?id=${track.id}.mp3`;
-        triedFallbackSource = true;
-        console.log(`Silently falling back to official source for song ID: ${track.id}`);
+      if (sourceIndex >= 0 && sourceIndex < AUDIO_SOURCES.length) {
+        audio.src = AUDIO_SOURCES[sourceIndex](track.id);
+        console.log(`Loading song source index ${sourceIndex} for ID ${track.id}`);
       } else {
-        audio.src = `https://v.iarc.top/?server=netease&type=url&id=${track.id}`;
-        triedFallbackSource = false;
+        audio.src = '';
       }
     } else if (track.url) {
       audio.src = track.url;
-      triedFallbackSource = false;
+      currentSourceIndex = -1;
     }
     audio.load();
   }
@@ -2289,11 +2293,12 @@ document.addEventListener('DOMContentLoaded', () => {
   audio.addEventListener('error', (e) => {
     console.error('Audio load error:', e);
     
-    // Auto-fallback quietly when the official outer link fails
+    // Auto-fallback quietly when the current source fails
     const track = currentPlaylist[currentTrackIndex];
-    if (track && track.id && !triedFallbackSource) {
-      console.log(`Official link failed. Retrying silently with fallback proxy source...`);
-      loadTrackSource(track, true);
+    if (track && track.id && currentSourceIndex !== -1 && (currentSourceIndex + 1) < AUDIO_SOURCES.length) {
+      const nextSourceIndex = currentSourceIndex + 1;
+      console.log(`Audio source index ${currentSourceIndex} failed. Retrying silently with source index ${nextSourceIndex}...`);
+      loadTrackSource(track, nextSourceIndex);
       playAudio();
       return;
     }
