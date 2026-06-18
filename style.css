@@ -2831,6 +2831,11 @@ body {
   background: rgba(var(--text-primary-rgb, 255,255,255), 0.08);
 }
 
+/* Hide mobile bottom tab bar on desktop views by default */
+.mobile-tab-bar {
+  display: none;
+}
+
 /* Responsive adjustments */
 @media (max-width: 900px) {
   .fullscreen-lyrics-overlay.lyrics-active .fs-grid-layout,
