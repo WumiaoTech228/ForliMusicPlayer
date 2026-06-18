@@ -1,7 +1,7 @@
 @echo off
 :: 设置字符编码为 UTF-8，防止中文显示乱码
 chcp 65001 >nul
-title Apple Music Web Player 快速启动服务
+title Apple Music Web Player 极简启动器
 
 :menu
 cls
