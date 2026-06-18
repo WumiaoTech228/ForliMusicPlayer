@@ -1879,8 +1879,8 @@ body {
 
 /* Lyrics Panel */
 .fs-lyrics-panel {
-  width: 100%;
-  max-width: 460px; /* Limits lyrics text wrap width to match the left cover/title column */
+  width: 48vh;
+  max-width: 540px; /* Exact match with left cover container width */
   height: 52vh;
   min-height: 400px;
   max-height: 600px;
@@ -2939,6 +2939,8 @@ body {
   }
   
   .fs-lyrics-panel {
+    width: 100% !important;
+    max-width: 100% !important;
     height: 100%;
   }
 
@@ -3411,6 +3413,7 @@ body {
   }
   
   .fs-lyrics-panel {
+    width: 32vh !important;
     height: 45vh !important;
     min-height: 220px !important;
   }
@@ -3472,6 +3475,7 @@ body {
   }
   
   .fs-lyrics-panel {
+    width: 25vh !important;
     height: 40vh !important;
     min-height: 180px !important;
   }
