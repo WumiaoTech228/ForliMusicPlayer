@@ -844,16 +844,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
 
   function loadActivePlaylist() {
-    // Always fetch fresh playlist online, ignoring the local storage 'aura-custom-playlist' cache on startup.
-    // If we have a saved online playlist ID, use it; otherwise default to '8529369110'
+    // Try to load from local storage cache first for instant startup
+    const cachedPlaylist = localStorage.getItem('aura-custom-playlist');
     const targetPlaylistId = (currentPlaylistId && currentPlaylistId !== 'temporary' && !isNaN(currentPlaylistId)) 
       ? currentPlaylistId 
       : '8529369110';
+
+    if (cachedPlaylist) {
+      try {
+        const parsed = JSON.parse(cachedPlaylist);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          currentPlaylist = parsed;
+          console.log(`Loaded ${currentPlaylist.length} tracks from local cache for instant start.`);
+          updatePlaylistSelect();
+          // Initialize UI with cached data immediately
+          bootstrapPlayer();
+          
+          // Fetch fresh online data silently in the background to update the cache
+          fetchOnlinePlaylist(targetPlaylistId, true);
+          return;
+        }
+      } catch (e) {
+        console.warn("Failed to parse cached playlist on startup:", e);
+      }
+    }
       
-    fetchOnlinePlaylist(targetPlaylistId);
+    // If no cache exists, do a regular online fetch which will run bootstrapPlayer() on finish
+    fetchOnlinePlaylist(targetPlaylistId, false);
   }
 
-  async function fetchOnlinePlaylist(playlistId) {
+  async function fetchOnlinePlaylist(playlistId, isSilentBackground = false) {
     try {
       console.log(`Fetching online NetEase playlist ${playlistId}...`);
       let data = null;
@@ -879,6 +899,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (Array.isArray(data) && data.length > 0) {
+        const currentPlayingTrack = currentPlaylist[currentTrackIndex];
+
         currentPlaylist = data.map(item => {
           let songId = null;
           const match = item.url.match(/id=(\d+)/);
@@ -894,6 +916,15 @@ document.addEventListener('DOMContentLoaded', () => {
             lrc: item.lrc
           };
         });
+
+        // Sync currently playing track index in the newly fetched list
+        if (currentPlayingTrack) {
+          const newIndex = currentPlaylist.findIndex(t => t.id === currentPlayingTrack.id || (t.file && t.url === currentPlayingTrack.url));
+          if (newIndex !== -1) {
+            currentTrackIndex = newIndex;
+            console.log(`Synchronized currently playing track to index ${newIndex} after background update.`);
+          }
+        }
         
         // Add to saved playlists if not present
         if (playlistId !== 'temporary' && !savedPlaylists.some(p => p.id === playlistId)) {
@@ -910,21 +941,31 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Successfully imported playlist ${playlistId} with ${currentPlaylist.length} songs.`);
         
         updatePlaylistSelect();
+
+        if (isSilentBackground) {
+          // Update list in UI quietly without resetting active track
+          renderPlaylistSongs();
+          preFetchPlaylistCovers(currentPlaylist);
+        } else {
+          bootstrapPlayer();
+        }
       } else {
         throw new Error("Empty or invalid playlist returned.");
       }
     } catch (err) {
-      console.warn("All NetEase playlist fetches failed. Loading local backup playlist.", err);
-      currentPlaylist = playlist.map(item => ({
-        id: item.id,
-        name: item.name,
-        artist: item.artist,
-        url: item.url,
-        pic: 'default.svg',
-        lrc: null
-      }));
-    } finally {
-      bootstrapPlayer();
+      console.warn("All NetEase playlist fetches failed.", err);
+      if (!isSilentBackground) {
+        // If not silent background, fall back to local backup static list
+        currentPlaylist = playlist.map(item => ({
+          id: item.id,
+          name: item.name,
+          artist: item.artist,
+          url: item.url,
+          pic: 'default.svg',
+          lrc: null
+        }));
+        bootstrapPlayer();
+      }
     }
   }
 
