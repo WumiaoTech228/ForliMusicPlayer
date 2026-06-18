@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="noTransition" data-theme="apple-dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Apple Music</title>
+    <meta name="description" content="A premium 1:1 replica of Apple Music web player interface, featuring dynamic lyrics, fluid backdrop canvas, and NetEase Playlist integration.">
+    <link rel="stylesheet" href="./style.css" />
+    
+    <!-- jsmediatags library for reading ID3 tags of local files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    
+    <!-- Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sf-font@1.0.0/stylesheet.min.css" rel="stylesheet">
+</head>
+
+<body class="no-files">
+
+    <!-- App Layout Container -->
+    <div class="app-layout">
+        
+        <!-- Left Fixed Sidebar (260px width) -->
+        <aside class="sidebar">
+            <!-- Sidebar Header with Apple Music Logo -->
+            <div class="sidebar-header">
+                <div class="apple-music-logo">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.48C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.1 16.67C20.08 16.74 19.67 18.11 18.71 19.5M15.97 4.17C16.63 3.37 17.07 2.28 16.95 1C15.96 1.04 14.76 1.66 14.05 2.5C13.45 3.19 12.92 4.3 13.09 5.56C14.19 5.65 15.31 5 15.97 4.17Z"/>
+                    </svg>
+                    <span>Music</span>
+                </div>
+            </div>
+
+            <!-- Sidebar Navigation Menu -->
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <button class="sidebar-search-bar" data-tab="search" id="sidebar-search-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <span>搜索</span>
+                    </button>
+                    <button class="nav-item active" data-tab="listen-now">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                        </svg>
+                        <span>现在就听</span>
+                    </button>
+                    <button class="nav-item" data-tab="browse">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="2" x2="12" y2="22"></line>
+                            <line x1="12" y1="12" x2="2.05" y2="12"></line>
+                            <polyline points="12 12 19.07 4.93"></polyline>
+                        </svg>
+                        <span>浏览</span>
+                    </button>
+                    <button class="nav-item" data-tab="radio">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9M19.1 4.9c3.9 3.9 3.9 10.3 0 14.2M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                        <span>广播</span>
+                    </button>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">资料库</div>
+                    <button class="nav-item" data-tab="queue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                        <span>待播清单</span>
+                    </button>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">歌单</div>
+                    <div id="sidebar-playlists-list" class="sidebar-playlists-list">
+                        <!-- Dynamically populated -->
+                    </div>
+                    <button class="nav-item" id="sidebar-import-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <span>导入歌单</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Sidebar Pinned Footer (Apple Login Button / Theme Switcher) -->
+            <div class="sidebar-footer">
+                <button id="theme-toggle-btn" class="theme-select-btn" title="切换深色/浅色模式">
+                    <!-- Sun icon shown in dark mode to switch to light -->
+                    <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                    <!-- Moon icon shown in light mode to switch to dark -->
+                    <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span>切换主题</span>
+                </button>
+                
+                <!-- Hidden dummy wrapper to keep JS references from breaking -->
+                <div id="theme-dropdown" style="display: none !important;">
+                    <button id="theme-menu-btn" data-theme="apple-dark"></button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace (Rest of the screen) -->
+        <main class="main-content">
+            <!-- Top Navigation Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <button class="nav-arrow-btn" aria-label="后退">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="nav-arrow-btn" aria-label="前进" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+                <div class="header-right">
+                    <button class="login-avatar-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>登录</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Tab Container -->
+            <div class="page-container">
+                
+                <!-- Page 1: Listen Now -->
+                <section class="page-view active" id="view-listen-now">
+                    <h1 class="page-title">现在就听</h1>
+                    
+                    <div class="shelf">
+                        <div class="shelf-header">
+                            <h2 class="shelf-title">最近播放</h2>
+                        </div>
+                        <div class="shelf-grid horizontal-scroll" id="recently-played-shelf">
+                            <!-- Cards dynamically generated -->
+                            <div class="music-card" onclick="document.querySelector('[data-tab=queue]').click()">
+                                <div class="card-cover" style="background-image: url('./default.svg')">
+                                    <div class="card-play-overlay">
+                                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    </div>
+                                </div>
+                                <div class="card-title">查看队列</div>
+                                <div class="card-subtitle">待播清单</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shelf">
+                        <div class="shelf-header">
+                            <h2 class="shelf-title">为你推荐</h2>
+                        </div>
+                        <div class="shelf-grid">
+                            <!-- Premium Cards -->
+                            <div class="music-card" id="card-recommend-1">
+                                <div class="card-cover" style="background-image: url('https://p1.music.126.net/6y-UleoeBsciJlhgzA6cKw==/109951167636591393.jpg?param=300y300')"></div>
+                                <div class="card-title">Lo-Fi Chill Beats</div>
+                                <div class="card-subtitle">自习与深夜放松首选</div>
+                            </div>
+                            <div class="music-card" id="card-recommend-2">
+                                <div class="card-cover" style="background-image: url('https://p1.music.126.net/v7n24a_bZc6S7Wc-y4c1Ag==/109951165859188009.jpg?param=300y300')"></div>
+                                <div class="card-title">J-Pop Top Hits</div>
+                                <div class="card-subtitle">日本流行音乐风向标</div>
+                            </div>
+                            <div class="music-card" id="card-recommend-3">
+                                <div class="card-cover" style="background-image: url('https://p1.music.126.net/HQXQ02FkK1X_j16C1jO63Q==/109951168529369110.jpg?param=300y300')"></div>
+                                <div class="card-title">深夜歌厅</div>
+                                <div class="card-subtitle">都市霓虹背景配乐</div>
+                            </div>
+                            <div class="music-card" id="card-recommend-4">
+                                <div class="card-cover" style="background-image: url('https://p1.music.126.net/y4c1Ag_v7n24a_bZc6S7Wc==/109951165859188009.jpg?param=300y300')"></div>
+                                <div class="card-title">经典华语流行</div>
+                                <div class="card-subtitle">华语乐坛岁月金曲</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Page 2: Browse -->
+                <section class="page-view" id="view-browse">
+                    <h1 class="page-title">浏览</h1>
+                    
+                    <div class="shelf">
+                        <div class="shelf-header">
+                            <h2 class="shelf-title">新歌首发</h2>
+                        </div>
+                        <div class="shelf-grid">
+                            <div class="music-card">
+                                <div class="card-cover" style="background-image: url('https://p1.music.126.net/512358200.jpg?param=300y300')"></div>
+                                <div class="card-title">打上花火</div>
+                                <div class="card-subtitle">DAOKO × 米津玄師</div>
+                            </div>
+                            <div class="music-card">
+                                <div class="card-cover" style="background-image: url('https://p2.music.126.net/1417849873.jpg?param=300y300')"></div>
+                                <div class="card-title">一程山路</div>
+                                <div class="card-subtitle">毛不易</div>
+                            </div>
+                            <div class="music-card">
+                                <div class="card-cover" style="background-image: url('https://p2.music.126.net/2112196350.jpg?param=300y300')"></div>
+                                <div class="card-title">浮光</div>
+                                <div class="card-subtitle">周深</div>
+                            </div>
+                            <div class="music-card">
+                                <div class="card-cover" style="background-image: url('https://p2.music.126.net/29774171.jpg?param=300y300')"></div>
+                                <div class="card-title">新地球</div>
+                                <div class="card-subtitle">林俊杰</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Page 3: Radio -->
+                <section class="page-view" id="view-radio">
+                    <h1 class="page-title">广播</h1>
+                    
+                    <div class="shelf">
+                        <div class="shelf-header">
+                            <h2 class="shelf-title">独家电台频道</h2>
+                        </div>
+                        <div class="shelf-grid">
+                            <div class="music-card radio-card">
+                                <div class="card-cover gradient-red">
+                                    <div class="radio-badge">LIVE</div>
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                                </div>
+                                <div class="card-title">Apple Music 1</div>
+                                <div class="card-subtitle">全球流行音乐前沿电台</div>
+                            </div>
+                            <div class="music-card radio-card">
+                                <div class="card-cover gradient-purple">
+                                    <div class="radio-badge">LIVE</div>
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                                </div>
+                                <div class="card-title">Apple Music Hits</div>
+                                <div class="card-subtitle">80、90及千禧金曲串烧</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Page 4: Search (Integrates the online search beautifully) -->
+                <section class="page-view" id="view-search">
+                    <h1 class="page-title">搜索</h1>
+                    
+                    <div class="search-input-wrapper">
+                        <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="online-search-input" placeholder="输入歌曲、歌手或专辑..." autocomplete="off">
+                    </div>
+
+                    <!-- Search Categories (Grids) -->
+                    <div class="search-categories-panel" id="search-categories-panel">
+                        <h3 class="shelf-title">浏览类别</h3>
+                        <div class="categories-grid">
+                            <div class="category-card gradient-pop" onclick="document.getElementById('online-search-input').value = '流行'; document.getElementById('online-search-input').dispatchEvent(new Event('input'))">
+                                <span>流行乐</span>
+                            </div>
+                            <div class="category-card gradient-rock" onclick="document.getElementById('online-search-input').value = '摇滚'; document.getElementById('online-search-input').dispatchEvent(new Event('input'))">
+                                <span>摇滚乐</span>
+                            </div>
+                            <div class="category-card gradient-jpop" onclick="document.getElementById('online-search-input').value = 'ACG'; document.getElementById('online-search-input').dispatchEvent(new Event('input'))">
+                                <span>动漫与ACG</span>
+                            </div>
+                            <div class="category-card gradient-lofi" onclick="document.getElementById('online-search-input').value = 'Lofi'; document.getElementById('online-search-input').dispatchEvent(new Event('input'))">
+                                <span>低保真 Lo-Fi</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Results (Song list container) -->
+                    <div class="search-results-panel hidden" id="search-results-panel">
+                        <h3 class="shelf-title">搜索结果</h3>
+                        <div class="search-songs-list" id="online-search-results">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Page 5: Queue (Integrated view of Play Queue) -->
+                <section class="page-view" id="view-queue">
+                    <div class="queue-page-header">
+                        <h1 class="page-title">待播清单 (<span id="playlist-count">0</span>)</h1>
+                        <button id="clear-queue-btn" class="clear-queue-action-btn" title="清空待播清单">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            <span>清空队列</span>
+                        </button>
+                    </div>
+
+                    <div class="queue-selector-row">
+                        <!-- Custom Playlist Selector Dropdown -->
+                        <div class="playlist-dropdown-wrap">
+                            <select id="playlist-select" class="playlist-select" aria-label="选择歌单">
+                                <!-- Dynamically populated -->
+                            </select>
+                        </div>
+                        <div class="queue-songs-filter">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="playlist-search" placeholder="过滤当前队列歌曲/歌手..." autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="queue-table-container">
+                        <div class="queue-table-header">
+                            <span class="col-index">#</span>
+                            <span class="col-title">标题</span>
+                            <span class="col-artist">歌手</span>
+                        </div>
+                        <div class="queue-songs-list" id="playlist-songs-list">
+                            <!-- Playlist items injected here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Bottom Persistent Player Bar -->
+            <footer class="player-bar">
+                <!-- Left: Control buttons -->
+                <div class="player-controls-left">
+                    <button id="prev-btn" class="bar-btn" title="上一首">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="19 20 9 12 19 4 19 20" />
+                            <line x1="5" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button id="play-trigger-btn" class="bar-play-btn" title="播放/暂停">
+                        <svg class="play-svg" viewBox="0 0 32 28">
+                            <path d="M10.345 23.287c.415 0 .763-.15 1.22-.407l12.742-7.404c.838-.481 1.178-.855 1.178-1.46 0-.599-.34-.972-1.178-1.462L11.565 5.158c-.457-.265-.805-.407-1.22-.407-.789 0-1.345.606-1.345 1.57V21.71c0 .971.556 1.577 1.345 1.577z" fill="currentColor"></path>
+                        </svg>
+                        <svg class="pause-svg" viewBox="0 0 32 28" style="display: none;">
+                            <path d="M13.293 22.772c.955 0 1.436-.481 1.436-1.436V6.677c0-.98-.481-1.427-1.436-1.427h-2.457c-.954 0-1.436.473-1.436 1.427v14.66c-.008.954.473 1.435 1.436 1.435h2.457zm7.87 0c.954 0 1.427-.481 1.427-1.436V6.677c0-.98-.473-1.427-1.428-1.427h-2.465c-.955 0-1.428.473-1.428 1.427v14.66c0 .954.473 1.435 1.428 1.435h2.465z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                    <button id="next-btn" class="bar-btn" title="下一首">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 4 15 12 5 20 5 4" />
+                            <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Center: LCD Now Playing Information -->
+                <div class="player-lcd-center">
+                    <div class="lcd-cover" id="album-cover-img" style="background-image: url('./default.svg')"></div>
+                    <div class="lcd-meta-wrap">
+                        <div class="lcd-text-row">
+                            <span class="lcd-song-title" id="track-name">等待选择音频</span>
+                            <span class="lcd-artist-name" id="track-artist">本地音乐</span>
+                        </div>
+                        <div class="lcd-timeline-row">
+                            <span class="lcd-time" id="current-time">0:00</span>
+                            <div class="lcd-slider-container">
+                                <div class="lcd-slider-fill" id="slider-fill"></div>
+                                <input type="range" id="progress-slider" min="0" max="100" value="0" class="lcd-slider-input" aria-label="播放进度">
+                            </div>
+                            <span class="lcd-time" id="total-time">-0:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Action toggles -->
+                <div class="player-actions-right">
+                    <!-- Volume control element -->
+                    <div class="bar-volume-wrap">
+                        <button id="mute-btn" class="vol-btn" title="静音/恢复">
+                            <svg class="vol-high-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                            </svg>
+                            <svg class="vol-muted-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                                <line x1="23" y1="9" x2="17" y2="15" />
+                                <line x1="17" y1="9" x2="23" y2="15" />
+                            </svg>
+                        </button>
+                        <div class="vol-slider-container">
+                            <input type="range" id="volume-slider" min="0" max="100" value="70" class="vol-slider-input" aria-label="音量">
+                            <div class="vol-slider-fill" id="volume-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Apple Loop mode button -->
+                    <button id="loop-mode-btn" class="bar-action-btn" title="循环模式">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 2.1l4 4-4 4" />
+                            <path d="M3 12.2v-2a4 4 0 0 1 4-4h14" />
+                            <path d="M7 21.9l-4-4 4-4" />
+                            <path d="M21 11.8v2a4 4 0 0 1-4 4H3" />
+                        </svg>
+                    </button>
+
+                    <!-- Toggle Lyrics Overlay -->
+                    <button id="player-lyrics-toggle" class="bar-action-btn lyrics-btn" title="显示歌词及视觉背景">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Toggle right drawer panel (For compact view) -->
+                    <button id="playlist-toggle-btn" class="bar-action-btn queue-btn" title="播放队列面板">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </footer>
+        </main>
+        
+        <!-- Pinned Right Flyout Queue Drawer (For playlist drawer compatibility) -->
+        <div class="playlist-drawer" id="playlist-drawer">
+            <div class="drawer-header">
+                <h3>播放队列</h3>
+                <button id="playlist-close-btn" class="drawer-close" aria-label="关闭">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <!-- Links to standard inputs / drawer buttons mapping to support import JS actions -->
+            <div class="drawer-actions-row">
+                <button id="import-file-btn" class="mini-action-btn">文件</button>
+                <button id="import-folder-btn" class="mini-action-btn">目录</button>
+            </div>
+            <div class="drawer-list-scroller">
+                <div class="drawer-queue-list" id="drawer-songs-list-copy">
+                    <!-- Synced copy or fallback list -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Bottom Tab Bar -->
+        <div class="mobile-tab-bar">
+            <button class="tab-btn active" data-target="listen-now">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                </svg>
+                <span>现在就听</span>
+            </button>
+            <button class="tab-btn" data-target="browse">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="2" x2="12" y2="22"></line>
+                    <line x1="12" y1="12" x2="2.05" y2="12"></line>
+                    <polyline points="12 12 19.07 4.93"></polyline>
+                </svg>
+                <span>浏览</span>
+            </button>
+            <button class="tab-btn" data-target="radio">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9M19.1 4.9c3.9 3.9 3.9 10.3 0 14.2M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path>
+                    <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+                <span>广播</span>
+            </button>
+            <button class="tab-btn" data-target="queue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                <span>待播清单</span>
+            </button>
+            <button class="tab-btn" data-target="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>搜索</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Immersive Fullscreen Now Playing Overlay (Apple Music Style) -->
+    <div class="fullscreen-lyrics-overlay" id="fullscreen-lyrics-overlay">
+        <!-- Close overlay button (Chevron Down) -->
+        <button class="fs-close-btn" id="fs-close-overlay-btn" title="收起播放页面">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+
+        <!-- Fullscreen Layout Grid -->
+        <div class="fs-grid-layout" id="fs-grid-layout">
+            <!-- Left Side: Cover Art and Meta -->
+            <div class="fs-cover-column" id="fs-cover-column">
+                <div class="fs-cover-container" id="cover-trigger" title="单击选择本地文件播放 | 双击播放/暂停">
+                    <div class="fs-cover-image" id="fs-cover-art" style="background-image: url('./default.svg');"></div>
+                    <div class="fs-cover-glow" id="fs-cover-glow" style="background-image: url('./default.svg');"></div>
+                    <div class="fs-cover-reflection"></div>
+                </div>
+                <div class="fs-track-details">
+                    <div class="fs-meta-text">
+                        <div class="fs-song-title" id="fs-track-name">等待选择音频</div>
+                        <div class="fs-artist-name" id="fs-track-artist">本地音乐</div>
+                    </div>
+                    <button class="fs-options-btn" id="fs-track-options-btn" title="更多选项">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="5" cy="12" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="19" cy="12" r="2"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Integrated Controls Panel -->
+                <div class="fs-controls-panel">
+                    <!-- Scrubber Slider -->
+                    <div class="fs-scrubber-panel">
+                        <div class="fs-slider-container">
+                            <div class="fs-slider-fill" id="fs-slider-fill"></div>
+                            <input type="range" id="fs-progress-slider" min="0" max="100" value="0" class="fs-slider-input" aria-label="播放进度">
+                        </div>
+                        <div class="fs-timeline-times">
+                            <span class="fs-time" id="fs-current-time">0:00</span>
+                            <span class="fs-time" id="fs-total-time">-0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Controls & Actions Row -->
+                    <div class="fs-controls-actions-row">
+                        <!-- Playback Controls -->
+                        <div class="fs-playback-controls">
+                            <!-- Shuffle -->
+                            <button id="fs-shuffle-btn" class="fs-control-btn secondary" title="随机播放">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="16 3 21 3 21 8"></polyline>
+                                    <line x1="4" y1="20" x2="21" y2="3"></line>
+                                    <polyline points="21 16 21 21 16 21"></polyline>
+                                    <line x1="15" y1="15" x2="21" y2="21"></line>
+                                    <line x1="4" y1="4" x2="9" y2="9"></line>
+                                </svg>
+                            </button>
+                            <!-- Previous -->
+                            <button id="fs-prev-btn" class="fs-control-btn" title="上一首">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="19 20 9 12 19 4 19 20" />
+                                    <line x1="5" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                            <!-- Play/Pause -->
+                            <button id="fs-play-btn" class="fs-control-btn play-btn" title="播放/暂停">
+                                <svg class="play-svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                <svg class="pause-svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+                                </svg>
+                            </button>
+                            <!-- Next -->
+                            <button id="fs-next-btn" class="fs-control-btn" title="下一首">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 4 15 12 5 20 5 4" />
+                                    <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                            <!-- Repeat / Loop mode -->
+                            <button id="fs-loop-btn" class="fs-control-btn secondary" title="循环模式">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="17 2.1 21 6.1 17 10.1"></polyline>
+                                    <path d="M3 12.2v-2a4 4 0 0 1 4-4h14"></path>
+                                    <polyline points="7 21.9 3 17.9 7 13.9"></polyline>
+                                    <path d="M21 11.8v2a4 4 0 0 1-4 4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Volume controls (Apple style) -->
+                        <div class="fs-volume-wrap">
+                            <!-- Left: Low volume icon -->
+                            <svg class="fs-vol-icon fs-vol-low" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="fs-vol-low-icon">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            </svg>
+                            <!-- Middle: Volume slider -->
+                            <div class="fs-vol-slider-container">
+                                <input type="range" id="fs-volume-slider" min="0" max="100" value="70" class="fs-vol-slider-input" aria-label="音量">
+                                <div class="fs-vol-slider-fill" id="fs-volume-fill"></div>
+                            </div>
+                            <!-- Right: High volume icon -->
+                            <svg class="fs-vol-icon fs-vol-high" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="fs-vol-high-icon">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Dynamic Panels (Lyrics or Play Queue) -->
+            <div class="fs-dynamic-column" id="fs-dynamic-column">
+                <!-- Instrumental Prelude/Interlude Countdown Dots -->
+                <div class="fs-instrumental-dots hidden" id="fs-instrumental-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <!-- Lyrics Section (Visible by default in lyrics mode) -->
+                <div class="fs-lyrics-panel" id="fs-lyrics-panel">
+                    <div class="lyricscontainer" id="lyrics-scroller">
+                        <div class="lyrics has-placeholder" id="lyrics-wrapper">
+                            <!-- Dynamic scrolling lyrics lines positioned here -->
+                            <div class="no-lyrics-placeholder">
+                                <svg class="no-lyrics-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 18V5l12-2v13"></path>
+                                    <circle cx="6" cy="18" r="3"></circle>
+                                    <circle cx="18" cy="16" r="3"></circle>
+                                </svg>
+                                <p class="no-lyrics-text">无歌词</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Queue Section (Visible when queue toggled) -->
+                <div class="fs-queue-panel hidden" id="fs-queue-panel">
+                    <div class="fs-queue-header">
+                        <h3>待播清单</h3>
+                        <button id="fs-clear-queue-btn" class="fs-mini-action-btn">清空队列</button>
+                    </div>
+                    <div class="fs-queue-list-container">
+                        <div class="fs-queue-list" id="fs-queue-list">
+                            <!-- Dynamic queue list items -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Status text mapping for js -->
+                <span id="lyrics-status" style="display:none;"></span>
+            </div>
+        </div>
+        <!-- Pinned Bottom Right Actions (Lyrics & Queue Toggles) -->
+        <div class="fs-global-actions">
+            <!-- Lyrics toggle -->
+            <button id="fs-lyrics-toggle-btn" class="fs-global-action-btn" title="显示歌词">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </button>
+
+            <!-- Queue toggle -->
+            <button id="fs-queue-toggle-btn" class="fs-global-action-btn" title="显示队列">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Fullscreen Track Options Popover Menu -->
+    <div class="fs-options-menu" id="fs-options-menu">
+        <button class="fs-options-menu-item" id="fs-menu-copy-info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>复制歌曲信息</span>
+        </button>
+        <button class="fs-options-menu-item" id="fs-menu-copy-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <span>复制网易云链接</span>
+        </button>
+        <button class="fs-options-menu-item" id="fs-menu-download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>下载歌曲</span>
+        </button>
+    </div>
+
+    <!-- Glassmorphic NetEase Playlist Import Modal -->
+    <div class="modal-overlay" id="import-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>导入网易云歌单</h3>
+                <button id="modal-close-btn" class="modal-close" aria-label="关闭弹窗">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">请输入网易云公开歌单的 ID 或完整链接：</p>
+                <div class="modal-input-group">
+                    <input type="text" id="playlist-input" placeholder="例如：8529369110 或链接" autocomplete="off">
+                </div>
+                <div class="modal-actions">
+                    <button id="modal-cancel-btn" class="modal-btn secondary">取消</button>
+                    <button id="modal-submit-btn" class="modal-btn primary">导入并播放</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden elements to keep old JS references from breaking -->
+    <div style="display: none;">
+        <div id="eq-visualizer"></div>
+        <button id="source-toggle-btn" data-source="official">
+            <span class="pill-option" data-val="official"></span>
+            <span class="pill-option" data-val="thirdparty"></span>
+        </button>
+        <!-- Unused Tab controls mapped to satisfy DOM triggers -->
+        <button id="tab-queue"></button>
+        <button id="tab-search"></button>
+        <div id="queue-tab-content"></div>
+        <div id="search-tab-content"></div>
+        <!-- Online search action buttons -->
+        <div id="online-search-results-drawer-copy"></div>
+        <button id="import-playlist-btn"></button>
+    </div>
+
+    <!-- Hidden Local Audio/LRC File Selectors -->
+    <input type="file" id="local-audio-file" accept="audio/*" class="hidden-input">
+    <input type="file" id="local-lrc-file" accept=".lrc,text/*" class="hidden-input">
+    <input type="file" id="local-folder-file" webkitdirectory directory multiple class="hidden-input">
+
+    <!-- Fluid Background Canvas (Always present for the fullscreen view) -->
+    <canvas class="canvas" id="bg-fluid-canvas"></canvas>
+    
+    <!-- Core HTML5 Audio Player -->
+    <audio id="audio-player" preload="auto"></audio>
+
+    <!-- Scripts -->
+    <script src="playlist.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
