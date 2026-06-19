@@ -1237,10 +1237,33 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .sort((a, b) => a.time - b.time);
 
-    // Calculate end times for each line
-    for (let i = 0; i < parsed.length; i++) {
-      const current = parsed[i];
-      const next = parsed[i + 1];
+    // Merge duplicate/inline timestamps before calculating end times
+    const merged = [];
+    const timeMap = new Map();
+    parsed.forEach(line => {
+      const key = Math.round(line.time * 10) / 10;
+      if (timeMap.has(key)) {
+        const existing = timeMap.get(key);
+        if (!existing.translation) {
+          existing.translation = line.text;
+        } else {
+          existing.translation += " / " + line.text;
+        }
+      } else {
+        const newLine = {
+          time: line.time,
+          text: line.text,
+          translation: null
+        };
+        merged.push(newLine);
+        timeMap.set(key, newLine);
+      }
+    });
+
+    // Calculate end times for each line in the merged array
+    for (let i = 0; i < merged.length; i++) {
+      const current = merged[i];
+      const next = merged[i + 1];
       
       if (next) {
         const gap = next.time - current.time;
@@ -1261,7 +1284,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    return parsed;
+    return merged;
   }
 
   function clearLyrics() {
@@ -1379,38 +1402,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function mergeLyrics(original, translation) {
     if (original.length === 0) return [];
-
-    // Helper to merge duplicate timestamps in the same array (inline translation)
-    function mergeInlineLyrics(lines) {
-      const merged = [];
-      const timeMap = new Map();
-      lines.forEach(line => {
-        // Use 100ms rounding tolerance to match duplicates
-        const key = Math.round(line.time * 10) / 10;
-        if (timeMap.has(key)) {
-          const existing = timeMap.get(key);
-          if (!existing.translation) {
-            existing.translation = line.text;
-          } else {
-            existing.translation += " / " + line.text;
-          }
-        } else {
-          const newLine = {
-            time: line.time,
-            endTime: line.endTime,
-            text: line.text,
-            translation: line.translation || null
-          };
-          merged.push(newLine);
-          timeMap.set(key, newLine);
-        }
-      });
-      return merged;
-    }
-
-    if (translation.length === 0) {
-      return mergeInlineLyrics(original);
-    }
+    if (translation.length === 0) return original;
     
     const tMap = new Map();
     translation.forEach(line => {
@@ -1418,17 +1410,15 @@ document.addEventListener('DOMContentLoaded', () => {
       tMap.set(key, line.text);
     });
 
-    const combined = original.map(line => {
+    return original.map(line => {
       const key = Math.round(line.time * 10) / 10;
       return {
         time: line.time,
         endTime: line.endTime,
         text: line.text,
-        translation: tMap.get(key) || null
+        translation: line.translation || tMap.get(key) || null
       };
     });
-
-    return mergeInlineLyrics(combined);
   }
 
   function finalizeLyricsLoading() {
