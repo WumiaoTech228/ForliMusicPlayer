@@ -2852,9 +2852,15 @@ body {
     height: calc(100vh - 240px) !important;
   }
   
+  .fullscreen-lyrics-overlay:not(.lyrics-active):not(.queue-active) .fs-grid-layout {
+    grid-template-rows: 1fr !important; /* Full height row to center content vertically */
+  }
+  
   .fs-cover-column {
     max-width: 100%;
-    gap: 16px;
+    height: 100%; /* Stretch to take full height of grid cell */
+    justify-content: center; /* Centering vertically */
+    gap: 20px;
   }
 
   .fs-cover-container {
@@ -3033,15 +3039,7 @@ body {
   }
 
   .fs-volume-wrap {
-    order: 2;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 8px !important;
-    box-sizing: border-box !important;
+    display: none !important; /* Hide volume slider on mobile views in fullscreen mode */
   }
 
   /* Ensure scrubber handle & volume handle are always visible on mobile touch screen */
