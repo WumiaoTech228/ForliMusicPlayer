@@ -753,10 +753,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let newS = hsl[1];
         let newL = hsl[2];
         
-        // Only shift hue if the color has some saturation to avoid adding rainbow shades to grays
-        if (hsl[1] > 10) {
-          newH = (hsl[0] + (i * 35)) % 360;
-          newS = Math.max(15, Math.min(95, hsl[1] + (i * 5 - 10)));
+        // Avoid shifting hue to prevent mismatched "neon" colors (e.g. red turning to green).
+        // Instead, we vary the saturation and lightness for a harmonious mono/analogous palette.
+        if (hsl[1] > 20) {
+          newS = Math.max(15, Math.min(95, hsl[1] + (i * 4 - 8)));
         }
         
         // Generate light/dark gradient steps
