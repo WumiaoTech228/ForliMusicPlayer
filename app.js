@@ -1379,7 +1379,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function mergeLyrics(original, translation) {
     if (original.length === 0) return [];
-    if (translation.length === 0) return original;
+
+    // Helper to merge duplicate timestamps in the same array (inline translation)
+    function mergeInlineLyrics(lines) {
+      const merged = [];
+      const timeMap = new Map();
+      lines.forEach(line => {
+        // Use 100ms rounding tolerance to match duplicates
+        const key = Math.round(line.time * 10) / 10;
+        if (timeMap.has(key)) {
+          const existing = timeMap.get(key);
+          if (!existing.translation) {
+            existing.translation = line.text;
+          } else {
+            existing.translation += " / " + line.text;
+          }
+        } else {
+          const newLine = {
+            time: line.time,
+            endTime: line.endTime,
+            text: line.text,
+            translation: line.translation || null
+          };
+          merged.push(newLine);
+          timeMap.set(key, newLine);
+        }
+      });
+      return merged;
+    }
+
+    if (translation.length === 0) {
+      return mergeInlineLyrics(original);
+    }
     
     const tMap = new Map();
     translation.forEach(line => {
@@ -1387,7 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tMap.set(key, line.text);
     });
 
-    return original.map(line => {
+    const combined = original.map(line => {
       const key = Math.round(line.time * 10) / 10;
       return {
         time: line.time,
@@ -1396,6 +1427,8 @@ document.addEventListener('DOMContentLoaded', () => {
         translation: tMap.get(key) || null
       };
     });
+
+    return mergeInlineLyrics(combined);
   }
 
   function finalizeLyricsLoading() {
