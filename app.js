@@ -199,6 +199,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Load Playlist (Custom from cache or default NetEase online)
     loadActivePlaylist();
 
+    // Bind click event listeners to dynamic music recommendation cards
+    const recommendationCards = document.querySelectorAll('.music-card[data-playlist-id], .music-card[data-song-id]');
+    recommendationCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const playlistId = card.getAttribute('data-playlist-id');
+        const songId = card.getAttribute('data-song-id');
+        if (playlistId) {
+          const playlistName = card.querySelector('.card-title').textContent;
+          showToast(`正在载入歌单: ${playlistName}...`);
+          fetchOnlinePlaylist(playlistId);
+        } else if (songId) {
+          const songName = card.querySelector('.card-title').textContent;
+          const songArtist = card.querySelector('.card-subtitle').textContent;
+          const songPic = card.getAttribute('data-song-pic');
+          playSongById(songId, songName, songArtist, songPic);
+        }
+      });
+    });
+
     // Countdown dots are controlled by playback time updates and do not require click handlers
 
     // 7. Initialize Sidebar Nav tab switching
@@ -1916,6 +1935,37 @@ document.addEventListener('DOMContentLoaded', () => {
     playAudio();
     
     showToast(`正在播放《${song.name}》`);
+    const queueNavItem = document.querySelector('.sidebar .nav-item[data-tab="queue"]');
+    if (queueNavItem) queueNavItem.click();
+  }
+
+  function playSongById(id, name, artist, pic) {
+    const track = {
+      id: parseInt(id, 10),
+      name: name,
+      artist: artist,
+      url: `https://music.163.com/song/media/outer/url?id=${id}.mp3`,
+      pic: pic || 'default.svg',
+      lrc: null
+    };
+
+    let targetIndex = 0;
+    if (currentPlaylist.length === 0) {
+      currentPlaylist.push(track);
+      targetIndex = 0;
+    } else {
+      currentPlaylist.splice(currentTrackIndex + 1, 0, track);
+      targetIndex = currentTrackIndex + 1;
+    }
+
+    currentPlaylistId = 'temporary';
+    updatePlaylistSelect();
+    renderPlaylistSongs();
+    document.body.classList.remove('no-files');
+    loadTrack(targetIndex);
+    playAudio();
+    
+    showToast(`正在播放《${name}》`);
     const queueNavItem = document.querySelector('.sidebar .nav-item[data-tab="queue"]');
     if (queueNavItem) queueNavItem.click();
   }

@@ -176,30 +176,70 @@
                         </div>
                     </div>
 
+                    <!-- Local Music Vinyl Player Card (Added as requested) -->
+                    <div class="shelf local-music-shelf">
+                        <div class="shelf-header">
+                            <h2 class="shelf-title">本地音乐唱片机</h2>
+                        </div>
+                        <div class="local-music-player-card">
+                            <div class="vinyl-record-wrap">
+                                <div class="vinyl-record">
+                                    <div class="vinyl-label">
+                                        <div class="vinyl-logo">AURA</div>
+                                    </div>
+                                </div>
+                                <div class="vinyl-tonearm"></div>
+                            </div>
+                            <div class="local-music-details">
+                                <h3 class="local-card-title">开启本地音乐之旅</h3>
+                                <p class="local-card-desc">自动提取歌曲封面、元数据与本地歌词文件，支持导入单曲或整个文件夹。</p>
+                                <div class="local-actions-group">
+                                    <button id="import-file-btn" class="local-action-btn primary-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                                        </svg>
+                                        <span>打开本地单曲</span>
+                                    </button>
+                                    <button id="import-folder-btn" class="local-action-btn secondary-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                                        </svg>
+                                        <span>导入音乐目录</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="shelf">
                         <div class="shelf-header">
                             <h2 class="shelf-title">为你推荐</h2>
                         </div>
                         <div class="shelf-grid">
-                            <!-- Premium Cards -->
-                            <div class="music-card" id="card-recommend-1">
+                            <!-- Premium Cards (Now mapped to dynamic playlist IDs) -->
+                            <div class="music-card" id="card-recommend-1" data-playlist-id="8529369110">
                                 <div class="card-cover" style="background-image: url('https://p1.music.126.net/6y-UleoeBsciJlhgzA6cKw==/109951167636591393.jpg?param=300y300')"></div>
                                 <div class="card-title">Lo-Fi Chill Beats</div>
                                 <div class="card-subtitle">自习与深夜放松首选</div>
                             </div>
-                            <div class="music-card" id="card-recommend-2">
+                            <div class="music-card" id="card-recommend-2" data-playlist-id="2829977417">
                                 <div class="card-cover" style="background-image: url('https://p1.music.126.net/v7n24a_bZc6S7Wc-y4c1Ag==/109951165859188009.jpg?param=300y300')"></div>
                                 <div class="card-title">J-Pop Top Hits</div>
                                 <div class="card-subtitle">日本流行音乐风向标</div>
                             </div>
-                            <div class="music-card" id="card-recommend-3">
+                            <div class="music-card" id="card-recommend-3" data-playlist-id="3778678">
                                 <div class="card-cover" style="background-image: url('https://p1.music.126.net/HQXQ02FkK1X_j16C1jO63Q==/109951168529369110.jpg?param=300y300')"></div>
-                                <div class="card-title">深夜歌厅</div>
+                                <div class="card-title">云音乐热歌榜</div>
                                 <div class="card-subtitle">都市霓虹背景配乐</div>
                             </div>
-                            <div class="music-card" id="card-recommend-4">
+                            <div class="music-card" id="card-recommend-4" data-playlist-id="19723756">
                                 <div class="card-cover" style="background-image: url('https://p1.music.126.net/y4c1Ag_v7n24a_bZc6S7Wc==/109951165859188009.jpg?param=300y300')"></div>
-                                <div class="card-title">经典华语流行</div>
+                                <div class="card-title">云音乐飙升榜</div>
                                 <div class="card-subtitle">华语乐坛岁月金曲</div>
                             </div>
                         </div>
@@ -215,25 +255,53 @@
                             <h2 class="shelf-title">新歌首发</h2>
                         </div>
                         <div class="shelf-grid">
-                            <div class="music-card">
+                            <div class="music-card" data-song-id="512358200" data-song-pic="https://p1.music.126.net/512358200.jpg">
                                 <div class="card-cover" style="background-image: url('https://p1.music.126.net/512358200.jpg?param=300y300')"></div>
                                 <div class="card-title">打上花火</div>
                                 <div class="card-subtitle">DAOKO × 米津玄師</div>
                             </div>
-                            <div class="music-card">
+                            <div class="music-card" data-song-id="1417849873" data-song-pic="https://p2.music.126.net/1417849873.jpg">
                                 <div class="card-cover" style="background-image: url('https://p2.music.126.net/1417849873.jpg?param=300y300')"></div>
                                 <div class="card-title">一程山路</div>
                                 <div class="card-subtitle">毛不易</div>
                             </div>
-                            <div class="music-card">
+                            <div class="music-card" data-song-id="2112196350" data-song-pic="https://p2.music.126.net/2112196350.jpg">
                                 <div class="card-cover" style="background-image: url('https://p2.music.126.net/2112196350.jpg?param=300y300')"></div>
                                 <div class="card-title">浮光</div>
                                 <div class="card-subtitle">周深</div>
                             </div>
-                            <div class="music-card">
+                            <div class="music-card" data-song-id="29774171" data-song-pic="https://p2.music.126.net/29774171.jpg">
                                 <div class="card-cover" style="background-image: url('https://p2.music.126.net/29774171.jpg?param=300y300')"></div>
                                 <div class="card-title">新地球</div>
                                 <div class="card-subtitle">林俊杰</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shelf">
+                        <div class="shelf-header">
+                            <h2 class="shelf-title">热门推荐歌单</h2>
+                        </div>
+                        <div class="shelf-grid">
+                            <div class="music-card" data-playlist-id="3779629">
+                                <div class="card-cover" style="background-image: url('https://p2.music.126.net/N2nSpCslkjC7h9Gqa-4VKA==/109951165859188009.jpg?param=300y300')"></div>
+                                <div class="card-title">新歌排行榜</div>
+                                <div class="card-subtitle">每日更新最潮新歌</div>
+                            </div>
+                            <div class="music-card" data-playlist-id="2884035">
+                                <div class="card-cover" style="background-image: url('https://p2.music.126.net/y4c1Ag_v7n24a_bZc6S7Wc==/109951165859188009.jpg?param=300y300')"></div>
+                                <div class="card-title">网易原创歌曲榜</div>
+                                <div class="card-subtitle">汇聚独立音乐人佳作</div>
+                            </div>
+                            <div class="music-card" data-playlist-id="923187">
+                                <div class="card-cover" style="background-image: url('https://p2.music.126.net/6y-UleoeBsciJlhgzA6cKw==/109951167636591393.jpg?param=300y300')"></div>
+                                <div class="card-title">ACG 动漫之声</div>
+                                <div class="card-subtitle">二次元流行与动漫原声</div>
+                            </div>
+                            <div class="music-card" data-playlist-id="3778678">
+                                <div class="card-cover" style="background-image: url('https://p2.music.126.net/HQXQ02FkK1X_j16C1jO63Q==/109951168529369110.jpg?param=300y300')"></div>
+                                <div class="card-title">云音乐热歌榜</div>
+                                <div class="card-subtitle">最受欢迎的热门单曲</div>
                             </div>
                         </div>
                     </div>
@@ -248,7 +316,7 @@
                             <h2 class="shelf-title">独家电台频道</h2>
                         </div>
                         <div class="shelf-grid">
-                            <div class="music-card radio-card">
+                            <div class="music-card radio-card" data-playlist-id="19723756">
                                 <div class="card-cover gradient-red">
                                     <div class="radio-badge">LIVE</div>
                                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
@@ -256,13 +324,37 @@
                                 <div class="card-title">Apple Music 1</div>
                                 <div class="card-subtitle">全球流行音乐前沿电台</div>
                             </div>
-                            <div class="music-card radio-card">
+                            <div class="music-card radio-card" data-playlist-id="3778678">
                                 <div class="card-cover gradient-purple">
                                     <div class="radio-badge">LIVE</div>
                                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
                                 </div>
                                 <div class="card-title">Apple Music Hits</div>
                                 <div class="card-subtitle">80、90及千禧金曲串烧</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shelf">
+                        <div class="shelf-header">
+                            <h2 class="shelf-title">全球流行排行榜广播</h2>
+                        </div>
+                        <div class="shelf-grid">
+                            <div class="music-card radio-card" data-playlist-id="60198">
+                                <div class="card-cover gradient-blue">
+                                    <div class="radio-badge">LIVE</div>
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                                </div>
+                                <div class="card-title">Billboard 周榜</div>
+                                <div class="card-subtitle">美国公告牌权威音乐榜单</div>
+                            </div>
+                            <div class="music-card radio-card" data-playlist-id="180106">
+                                <div class="card-cover gradient-green">
+                                    <div class="radio-badge">LIVE</div>
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                                </div>
+                                <div class="card-title">UK Official Chart</div>
+                                <div class="card-subtitle">英国官方排行榜热点</div>
                             </div>
                         </div>
                     </div>
@@ -452,11 +544,6 @@
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
-            </div>
-            <!-- Links to standard inputs / drawer buttons mapping to support import JS actions -->
-            <div class="drawer-actions-row">
-                <button id="import-file-btn" class="mini-action-btn">文件</button>
-                <button id="import-folder-btn" class="mini-action-btn">目录</button>
             </div>
             <div class="drawer-list-scroller">
                 <div class="drawer-queue-list" id="drawer-songs-list-copy">

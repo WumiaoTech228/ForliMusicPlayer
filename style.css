@@ -3511,3 +3511,221 @@ body {
     height: 24px !important;
   }
 }
+
+/* ==================================================
+   Local Music Player Card (Homepage Vinyl Shelf)
+   ================================================== */
+.local-music-player-card {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 24px;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="apple-light"] .local-music-player-card {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+.local-music-player-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="apple-light"] .local-music-player-card:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Rotating Vinyl Record Mockup */
+.vinyl-record-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vinyl-record {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #333 4%, #000 35%, #111 36%, #000 60%, #222 61%, #000 80%);
+  border: 2px solid #222;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+  animation: spinVinyl 16s linear infinite;
+  animation-play-state: paused;
+}
+
+.local-music-player-card:hover .vinyl-record {
+  animation-play-state: running;
+}
+
+.vinyl-record::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle at center, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 2px, transparent 4px);
+  pointer-events: none;
+}
+
+.vinyl-label {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fa243c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+}
+
+.vinyl-logo {
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #fff;
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.vinyl-tonearm {
+  position: absolute;
+  top: -10px;
+  right: 5px;
+  width: 50px;
+  height: 90px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpath d='M80,10 C80,10 90,80 50,130 C30,150 20,180 20,180 L10,185 L5,170 L15,165 C15,165 25,140 45,120 C75,80 70,20 70,20 Z' fill='%23cccccc'/%3E%3Ccircle cx='80' cy='15' r='10' fill='%23888888'/%3E%3Crect x='10' y='160' width='15' height='25' rx='3' fill='%23222222'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform-origin: 80% 15%;
+  transform: rotate(-15deg);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+.local-music-player-card:hover .vinyl-tonearm {
+  transform: rotate(5deg);
+}
+
+/* Vinyl rotation animation */
+@keyframes spinVinyl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Text details */
+.local-music-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.local-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+
+.local-card-desc {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0 0 8px 0;
+  color: var(--text-secondary);
+  opacity: 0.85;
+}
+
+/* Actions */
+.local-actions-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.local-action-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.local-action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.local-action-btn.primary-btn {
+  background: var(--color-accent);
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(var(--color-accent-rgb), 0.25);
+}
+
+.local-action-btn.primary-btn:hover {
+  background: var(--color-accent-hover);
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(var(--color-accent-rgb), 0.35);
+}
+
+.local-action-btn.secondary-btn {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
+}
+
+.local-action-btn.secondary-btn:hover {
+  background: rgba(var(--color-accent-rgb), 0.05);
+  border-color: rgba(var(--color-accent-rgb), 0.3);
+  color: var(--color-accent);
+  transform: scale(1.02);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .local-music-player-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  .local-actions-group {
+    justify-content: center;
+    width: 100%;
+  }
+  .local-action-btn {
+    flex: 1;
+    min-width: 140px;
+    justify-content: center;
+  }
+  .vinyl-tonearm {
+    right: 35px;
+  }
+}
