@@ -1804,6 +1804,7 @@ body {
 /* Right Side: Dynamic Panels */
 .fs-dynamic-column {
   flex: 1.2;
+  width: 100%; /* Prevents collapsing to 0 width when children are absolutely positioned in flexbox */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -1825,6 +1826,7 @@ body {
 
 .fullscreen-lyrics-overlay.lyrics-active .fs-dynamic-column,
 .fullscreen-lyrics-overlay.queue-active .fs-dynamic-column {
+  width: 100%;
   max-width: 720px;
   opacity: 1;
   pointer-events: auto;
